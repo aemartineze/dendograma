@@ -1,0 +1,77 @@
+---
+title: "Dendograma"
+
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Dendograma 
+
+Este proyecto describe un modelo de clustering jeráquico de los países de América utilizando los indicadores de salud sexual y reproductiva de acuerdo al siguiente detalle:
+
+- Tasa de mortalidad materna: número de muertes maternas durante un período determinado por cada 100.000 nacidos vivos durante el mismo período.
+- Partos atendidos por personal de salud capacitado: Porcentaje de partos atendidos por personal de salud capacitado (médico, enfermera o partera).
+- Número de nuevas infecciones por el VIH, todas las edades, por cada 1000 habitantes no infectados: Número de nuevas infecciones por el VIH por cada 1000 años-persona entre la población no infectada.
+- Tasa de uso de anticonceptivos: Porcentaje de mujeres de 15 a 49 años que actualmente utilizan algún método anticonceptivo.
+- Tasa de prevalencia de anticonceptivos, método moderno: Porcentaje de mujeres de 15 a 49 años que utilizan actualmente algún método anticonceptivo moderno.
+- Necesidad insatisfecha de planificación familiar: Porcentaje de mujeres de 15 a 49 años que desean interrumpir o retrasar la maternidad pero no utilizan ningún método anticonceptivo.
+- Proporción de la demanda satisfecha con métodos modernos: Porcentaje de la demanda total de planificación familiar entre mujeres de 15 a 49 años que se satisface con el uso de métodos anticonceptivos modernos.
+- Leyes y reglamentos que garantizan el acceso a la atención, la información y la educación en materia de salud sexual y reproductiva: la medida en que los países cuentan con leyes y reglamentos nacionales que garantizan el acceso pleno e igualitario de mujeres y hombres de 15 años o más a la atención, la información y la salud sexual y reproductiva. y educación.
+- Índice de cobertura de servicios de cobertura universal de salud (UHC): Cobertura promedio de servicios esenciales basada en intervenciones de seguimiento que incluyen salud reproductiva, materna, neonatal e infantil, enfermedades infecciosas, enfermedades no transmisibles y capacidad y acceso al servicio, entre el general y los más desfavorecidos. población.
+
+La información a ser utilizada ha sido cargada de la página del Fondo de Población de las Naciones Unidas desde el link:
+
+https://www.unfpa.org/modules/custom/unfpa_global_sowp_portal/data-file/SWOP-Data-2022.xlsx
+
+Se ha utilizado como fuente la página https://uc-r.github.io/hc_clustering
+
+```{r}
+#Librerías necesarias
+library(tidyverse)  
+library(cluster)    
+library(factoextra) 
+library(openxlsx)
+```
+# Cargamos la información de los países
+
+```{r}
+#Cargamos la información
+dir_web <- 'https://www.unfpa.org/modules/custom/unfpa_global_sowp_portal/data-file/SWOP-Data-2022.xlsx'
+ind_data <- read.xlsx(dir_web, sheet = 2, cols = 2:15, rows = 2:210)
+ind_data <- ind_data[-1,]
+#Filtramos los paises de América
+paises <- c('AG','AR','AW','BS','BB','BZ','BO','BR','CA','CL','CO','CR','CU','CW','DM','DO','EC','SV','GF','GD','GP','GT','GY','HT','HN','JM','MQ','MX','NI','PA','PY','PE','PR','KN','LC','VC','SX','SR','TT','TC','US','VI','UY','VE')
+ind_data <- ind_data[ind_data$ISO2 %in% paises,]
+names(ind_data)[names(ind_data) == "Countries,.territories,.other.areas"] <- 'paises'
+#Transformamos a números
+ind_data[c(-1,-2)] <- lapply(ind_data[c(-1,-2)], as.numeric)
+#Los valores nulos los asignamos con 0
+ind_data[c(-1,-2)][is.na(ind_data[c(-1,-2)])] <- 0
+
+row.names(ind_data) <- ind_data$paises
+ind_data$ISO2 <- NULL
+ind_data$paises <- NULL
+```
+
+#Escalamos las variables antes de realizar el clustering
+```{r}
+ind_data <- scale(ind_data)
+```
+
+#Agglomerative Hierarchical Clustering
+
+```{r}
+# Dissimilarity matrix
+d <- dist(ind_data, method = "euclidean")
+
+# Hierarchical clustering using Complete Linkage
+hc1 <- hclust(d, method = "complete" )
+
+# Plot the obtained dendrogram
+plot(hc1, cex = 0.6, hang = -1)
+rect.hclust(hc1, k = 3, border = 2:5)
+```
+
