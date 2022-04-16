@@ -1,5 +1,10 @@
 ---
 title: "Dendograma"
+knit: (function(input_file, encoding) {
+    out_dir <- 'docs';
+    rmarkdown::render(input_file,
+      encoding=encoding,
+      output_file=file.path(dirname(input_file), out_dir, 'index.html'))})
 
 output: html_document
 ---
@@ -7,8 +12,6 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-
-## Dendograma 
 
 Este proyecto describe un modelo de clustering jeráquico de los países de América utilizando los indicadores de salud sexual y reproductiva de acuerdo al siguiente detalle:
 
@@ -35,7 +38,7 @@ library(cluster)
 library(factoextra) 
 library(openxlsx)
 ```
-# Cargamos la información de los países
+#### Cargamos la información de los países
 
 ```{r}
 #Cargamos la información
@@ -56,12 +59,12 @@ ind_data$ISO2 <- NULL
 ind_data$paises <- NULL
 ```
 
-#Escalamos las variables antes de realizar el clustering
+#### Escalamos las variables antes de realizar el clustering
 ```{r}
 ind_data <- scale(ind_data)
 ```
 
-#Agglomerative Hierarchical Clustering
+#### Agglomerative Hierarchical Clustering
 
 ```{r}
 # Dissimilarity matrix
