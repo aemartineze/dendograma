@@ -370,58 +370,28 @@ pre code {
 países de América utilizando los indicadores de salud sexual y
 reproductiva de acuerdo al siguiente detalle:</p>
 <ul>
-<li>Tasa de mortalidad materna: número de muertes maternas durante un
-período determinado por cada 100.000 nacidos vivos durante el mismo
-período.</li>
-<li>Partos atendidos por personal de salud capacitado: Porcentaje de
-partos atendidos por personal de salud capacitado (médico, enfermera o
-partera).</li>
+<li>Tasa de mortalidad materna</li>
+<li>Partos atendidos por personal de salud capacitado</li>
 <li>Número de nuevas infecciones por el VIH, todas las edades, por cada
-1000 habitantes no infectados: Número de nuevas infecciones por el VIH
-por cada 1000 años-persona entre la población no infectada.</li>
-<li>Tasa de uso de anticonceptivos: Porcentaje de mujeres de 15 a 49
-años que actualmente utilizan algún método anticonceptivo.</li>
-<li>Tasa de prevalencia de anticonceptivos, método moderno: Porcentaje
-de mujeres de 15 a 49 años que utilizan actualmente algún método
-anticonceptivo moderno.</li>
-<li>Necesidad insatisfecha de planificación familiar: Porcentaje de
-mujeres de 15 a 49 años que desean interrumpir o retrasar la maternidad
-pero no utilizan ningún método anticonceptivo.</li>
-<li>Proporción de la demanda satisfecha con métodos modernos: Porcentaje
-de la demanda total de planificación familiar entre mujeres de 15 a 49
-años que se satisface con el uso de métodos anticonceptivos
-modernos.</li>
-<li>Leyes y reglamentos que garantizan el acceso a la atención, la
-información y la educación en materia de salud sexual y reproductiva: la
-medida en que los países cuentan con leyes y reglamentos nacionales que
-garantizan el acceso pleno e igualitario de mujeres y hombres de 15 años
-o más a la atención, la información y la salud sexual y reproductiva. y
-educación.</li>
-<li>Índice de cobertura de servicios de cobertura universal de salud
-(UHC): Cobertura promedio de servicios esenciales basada en
-intervenciones de seguimiento que incluyen salud reproductiva, materna,
-neonatal e infantil, enfermedades infecciosas, enfermedades no
-transmisibles y capacidad y acceso al servicio, entre el general y los
-más desfavorecidos. población.</li>
+1000 habitantes no infectados</li>
+<li>Tasa de uso de anticonceptivos</li>
+<li>Tasa de prevalencia de anticonceptivos, método moderno</li>
+<li>Necesidad insatisfecha de planificación familiar</li>
+<li>Proporción de la demanda satisfecha con métodos modernos</li>
+<li>Leyes y reglamentos que garantizan el acceso a la atención,
+información y educación en salud sexual y reproductiva</li>
+<li>Índice de cobertura de servicios de cobertura universal de
+salud</li>
 </ul>
 <p>La información a ser utilizada ha sido cargada de la página del Fondo
 de Población de las Naciones Unidas desde el link:</p>
 <p><a href="https://www.unfpa.org/modules/custom/unfpa_global_sowp_portal/data-file/SWOP-Data-2022.xlsx" class="uri">https://www.unfpa.org/modules/custom/unfpa_global_sowp_portal/data-file/SWOP-Data-2022.xlsx</a></p>
 <p>Se ha utilizado como fuente la página <a href="https://uc-r.github.io/hc_clustering" class="uri">https://uc-r.github.io/hc_clustering</a></p>
 <pre class="r"><code>#Librerías necesarias
-library(tidyverse)  </code></pre>
-<pre><code>## -- Attaching packages --------------------------------------- tidyverse 1.3.1 --</code></pre>
-<pre><code>## v ggplot2 3.3.5     v purrr   0.3.4
-## v tibble  3.1.6     v dplyr   1.0.8
-## v tidyr   1.2.0     v stringr 1.4.0
-## v readr   2.1.2     v forcats 0.5.1</code></pre>
-<pre><code>## -- Conflicts ------------------------------------------ tidyverse_conflicts() --
-## x dplyr::filter() masks stats::filter()
-## x dplyr::lag()    masks stats::lag()</code></pre>
-<pre class="r"><code>library(cluster)    
-library(factoextra) </code></pre>
-<pre><code>## Welcome! Want to learn more? See two factoextra-related books at https://goo.gl/ve3WBa</code></pre>
-<pre class="r"><code>library(openxlsx)</code></pre>
+library(tidyverse)  
+library(cluster)    
+library(factoextra) 
+library(openxlsx)</code></pre>
 <div id="cargamos-la-información-de-los-países" class="section level4">
 <h4>Cargamos la información de los países</h4>
 <pre class="r"><code>#Cargamos la información
@@ -433,43 +403,8 @@ paises &lt;- c(&#39;AG&#39;,&#39;AR&#39;,&#39;AW&#39;,&#39;BS&#39;,&#39;BB&#39;,
 ind_data &lt;- ind_data[ind_data$ISO2 %in% paises,]
 names(ind_data)[names(ind_data) == &quot;Countries,.territories,.other.areas&quot;] &lt;- &#39;paises&#39;
 #Transformamos a números
-ind_data[c(-1,-2)] &lt;- lapply(ind_data[c(-1,-2)], as.numeric)</code></pre>
-<pre><code>## Warning in lapply(ind_data[c(-1, -2)], as.numeric): NAs introducidos por
-## coerción
-
-## Warning in lapply(ind_data[c(-1, -2)], as.numeric): NAs introducidos por
-## coerción
-
-## Warning in lapply(ind_data[c(-1, -2)], as.numeric): NAs introducidos por
-## coerción
-
-## Warning in lapply(ind_data[c(-1, -2)], as.numeric): NAs introducidos por
-## coerción
-
-## Warning in lapply(ind_data[c(-1, -2)], as.numeric): NAs introducidos por
-## coerción
-
-## Warning in lapply(ind_data[c(-1, -2)], as.numeric): NAs introducidos por
-## coerción
-
-## Warning in lapply(ind_data[c(-1, -2)], as.numeric): NAs introducidos por
-## coerción
-
-## Warning in lapply(ind_data[c(-1, -2)], as.numeric): NAs introducidos por
-## coerción
-
-## Warning in lapply(ind_data[c(-1, -2)], as.numeric): NAs introducidos por
-## coerción
-
-## Warning in lapply(ind_data[c(-1, -2)], as.numeric): NAs introducidos por
-## coerción
-
-## Warning in lapply(ind_data[c(-1, -2)], as.numeric): NAs introducidos por
-## coerción
-
-## Warning in lapply(ind_data[c(-1, -2)], as.numeric): NAs introducidos por
-## coerción</code></pre>
-<pre class="r"><code>#Los valores nulos los asignamos con 0
+ind_data[c(-1,-2)] &lt;- lapply(ind_data[c(-1,-2)], as.numeric)
+#Los valores nulos los asignamos con 0
 ind_data[c(-1,-2)][is.na(ind_data[c(-1,-2)])] &lt;- 0
 
 row.names(ind_data) &lt;- ind_data$paises

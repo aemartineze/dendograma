@@ -9,21 +9,21 @@ knit: (function(input_file, encoding) {
 output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+```{r setup, include=FALSE} 
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
 ```
 
 Este proyecto describe un modelo de clustering jeráquico de los países de América utilizando los indicadores de salud sexual y reproductiva de acuerdo al siguiente detalle:
 
-- Tasa de mortalidad materna: número de muertes maternas durante un período determinado por cada 100.000 nacidos vivos durante el mismo período.
-- Partos atendidos por personal de salud capacitado: Porcentaje de partos atendidos por personal de salud capacitado (médico, enfermera o partera).
-- Número de nuevas infecciones por el VIH, todas las edades, por cada 1000 habitantes no infectados: Número de nuevas infecciones por el VIH por cada 1000 años-persona entre la población no infectada.
-- Tasa de uso de anticonceptivos: Porcentaje de mujeres de 15 a 49 años que actualmente utilizan algún método anticonceptivo.
-- Tasa de prevalencia de anticonceptivos, método moderno: Porcentaje de mujeres de 15 a 49 años que utilizan actualmente algún método anticonceptivo moderno.
-- Necesidad insatisfecha de planificación familiar: Porcentaje de mujeres de 15 a 49 años que desean interrumpir o retrasar la maternidad pero no utilizan ningún método anticonceptivo.
-- Proporción de la demanda satisfecha con métodos modernos: Porcentaje de la demanda total de planificación familiar entre mujeres de 15 a 49 años que se satisface con el uso de métodos anticonceptivos modernos.
-- Leyes y reglamentos que garantizan el acceso a la atención, la información y la educación en materia de salud sexual y reproductiva: la medida en que los países cuentan con leyes y reglamentos nacionales que garantizan el acceso pleno e igualitario de mujeres y hombres de 15 años o más a la atención, la información y la salud sexual y reproductiva. y educación.
-- Índice de cobertura de servicios de cobertura universal de salud (UHC): Cobertura promedio de servicios esenciales basada en intervenciones de seguimiento que incluyen salud reproductiva, materna, neonatal e infantil, enfermedades infecciosas, enfermedades no transmisibles y capacidad y acceso al servicio, entre el general y los más desfavorecidos. población.
+- Tasa de mortalidad materna
+- Partos atendidos por personal de salud capacitado
+- Número de nuevas infecciones por el VIH, todas las edades, por cada 1000 habitantes no infectados 
+- Tasa de uso de anticonceptivos
+- Tasa de prevalencia de anticonceptivos, método moderno 
+- Necesidad insatisfecha de planificación familiar
+- Proporción de la demanda satisfecha con métodos modernos
+- Leyes y reglamentos que garantizan el acceso a la atención, información y educación en salud sexual y reproductiva
+- Índice de cobertura de servicios de cobertura universal de salud
 
 La información a ser utilizada ha sido cargada de la página del Fondo de Población de las Naciones Unidas desde el link:
 
@@ -31,7 +31,7 @@ https://www.unfpa.org/modules/custom/unfpa_global_sowp_portal/data-file/SWOP-Dat
 
 Se ha utilizado como fuente la página https://uc-r.github.io/hc_clustering
 
-```{r}
+```{r message=FALSE}
 #Librerías necesarias
 library(tidyverse)  
 library(cluster)    
@@ -40,7 +40,7 @@ library(openxlsx)
 ```
 #### Cargamos la información de los países
 
-```{r}
+```{r message=FALSE}
 #Cargamos la información
 dir_web <- 'https://www.unfpa.org/modules/custom/unfpa_global_sowp_portal/data-file/SWOP-Data-2022.xlsx'
 ind_data <- read.xlsx(dir_web, sheet = 2, cols = 2:15, rows = 2:210)
@@ -58,6 +58,8 @@ row.names(ind_data) <- ind_data$paises
 ind_data$ISO2 <- NULL
 ind_data$paises <- NULL
 ```
+
+
 
 #### Escalamos las variables antes de realizar el clustering
 ```{r}
